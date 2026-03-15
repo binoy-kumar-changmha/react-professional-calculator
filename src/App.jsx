@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import './App.css'
 import Calculator from './components/Calculator'
 import InputDisplay from './components/InputDisplay'
@@ -16,6 +16,7 @@ const App = () => {
 
   const [output, setOutput] = useState("o_o")
   const [input, setInput] = useState("")
+  const inputRef = useRef(null)
 
 
 
@@ -30,12 +31,13 @@ const App = () => {
     else if (item === "*") {
       setInput(prev => prev + '×')
     }
-    else if (item === "/") {
-      setInput(prev => prev + '÷')
-    }
     else if (item === "=") {
       try {
-        setOutput(eval(input))
+        const expression = input
+          .replace(/×/g, "*")
+          .replace(/÷/g, "/")
+
+        setOutput(eval(expression))
       }
       catch {
         setOutput("error")
@@ -48,23 +50,19 @@ const App = () => {
 
 
 
-  const handleKeyDown = (e) => {
+  const handleKeyboard = (e) => {
     const key = e.key;
-    if (key >= "0" && key <= "9") {
-      handlingClick(null, key);  // pass number as item
-    } else if (key === "+") {
-      handlingClick(null, "+");
-    } else if (key === "-") {
-      handlingClick(null, "-");
-    } else if (key === "*") {
-      handlingClick(null, "*");
-    } else if (key === "/") {
-      handlingClick(null, "/");
-    } else if (key === "Enter" || key === "=") {
+
+    if (key === "Enter") {
       handlingClick(null, "=");
-    } else if (key === "Backspace") {
+    }
+
+    else if (key === "Backspace") {
+      e.preventDefault()
       handlingClick(null, "⌫");
-    } else if (key === "Escape") {
+    }
+
+    else if (key === "Escape") {
       handlingClick(null, "AC");
     }
   };
@@ -72,7 +70,7 @@ const App = () => {
 
 
   return <Calculator>
-    <InputDisplay input={input} handleKeyDown={handleKeyDown}></InputDisplay>
+    <InputDisplay input={input} handleKeyboard={handleKeyboard} setInput={setInput} inputRef={inputRef}></InputDisplay>
     <OutputDisplay output={output}></OutputDisplay>
     <Buttons buttonArr={buttonArr} handlingClick={handlingClick}></Buttons>
   </Calculator>
