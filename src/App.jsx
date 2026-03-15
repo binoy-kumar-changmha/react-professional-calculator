@@ -53,7 +53,7 @@ const App = () => {
   const handleKeyboard = (e) => {
     const key = e.key;
 
-    if (key === "Enter") {
+    if (key === "Enter" || key === "=") {
       handlingClick(null, "=");
     }
 
