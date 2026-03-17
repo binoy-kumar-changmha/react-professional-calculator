@@ -28,13 +28,14 @@ function InputDisplay({ input, handleKeyboard, setInput, inputRef, caretRef, nex
     <input
       ref={inputRef}
       autoFocus={!isMobile}       // don't auto-open keyboard on mobile
-      readOnly={isMobile}         // buttons only on mobile
+      inputMode={isMobile ? "none" : "text"}
       type="text"
       className={styles.inputDisplay}
       value={input}
       onKeyUp={updateCaret}
       onClick={updateCaret}
       onSelect={updateCaret}
+      onTouchEnd={updateCaret}
       onChange={(e) => {
         if (isMobile) return       // ignore on mobile
         const pos = e.target.selectionStart
