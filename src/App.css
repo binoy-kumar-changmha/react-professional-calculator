@@ -5,5 +5,5 @@ body {
   background-color: rgb(40, 162, 67);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
