@@ -2,7 +2,7 @@ body {
   margin: 0rem;
   /* height: 100vh; */
   background-color: rgb(25, 25, 25);
-  background-color: rgb(40, 162, 67);
+  /* background-color: rgb(40, 162, 67); */
   display: flex;
   justify-content: center;
   align-items: flex-start;
