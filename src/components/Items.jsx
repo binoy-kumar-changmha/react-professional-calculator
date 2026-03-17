@@ -5,6 +5,28 @@ function Items({ buttonArr, handlingClick }) {
   const orangeBtns = ['*', '/', '+', '-', '=']
   const lightBtns = ['AC', '(', ')']
 
+
+  function createRipple(e) {
+    const button = e.currentTarget
+
+    const circle = document.createElement("span")
+    const diameter = Math.max(button.clientWidth, button.clientHeight)
+    const radius = diameter / 2
+
+    circle.style.width = circle.style.height = `${diameter}px`
+    circle.style.left = `${e.clientX - button.getBoundingClientRect().left - radius}px`
+    circle.style.top = `${e.clientY - button.getBoundingClientRect().top - radius}px`
+    circle.classList.add(styles.ripple)
+
+    const ripple = button.getElementsByClassName(styles.ripple)[0]
+    if (ripple) {
+      ripple.remove()
+    }
+
+    button.appendChild(circle)
+  }
+
+
   return (
     <>
       {buttonArr.map(item => (
@@ -14,7 +36,10 @@ function Items({ buttonArr, handlingClick }) {
           ${orangeBtns.includes(item) ? styles.orange : ''}
           ${lightBtns.includes(item) ? styles.lightGrey : ''}`}
           onMouseDown={(e) => e.preventDefault()}
-          onClick={(event) => handlingClick(event, item)}>
+          onClick={(event) => {
+            createRipple(event)
+            handlingClick(event, item)
+          }}>
 
           {item === '*' ? '×' : item === '-' ? '−' : item === '/' ? '÷' : item}
         </button>
