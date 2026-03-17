@@ -20,16 +20,23 @@ const App = () => {
 
 
 
-  function handlingClick(event, item) {
+  function handlingClick(event, item, caret) {
+    const safeCaret = caret ?? input.length
     if (item === "AC") {
       setOutput("o_o")
       setInput("")
     }
     else if (item === "⌫") {
-      setInput(prev => prev.slice(0, -1)) // -1 means count from backward
+      setInput(prev => {
+        if (safeCaret === 0) return prev;
+        return prev.slice(0, safeCaret - 1) + prev.slice(safeCaret);
+      })
     }
     else if (item === "*") {
       setInput(prev => prev + '×')
+    }
+    else if (item === "÷") {
+      setInput(prev => prev + '/')
     }
     else if (item === "=") {
       try {
@@ -50,22 +57,12 @@ const App = () => {
 
 
 
-  const handleKeyboard = (e) => {
-    const key = e.key;
-
-    if (key === "Enter" || key === "=") {
-      handlingClick(null, "=");
-    }
-
-    else if (key === "Backspace") {
-      e.preventDefault()
-      handlingClick(null, "⌫");
-    }
-
-    else if (key === "Escape") {
-      handlingClick(null, "AC");
-    }
-  };
+  function handleKeyboard(e) {
+  const key = e.key
+  if (key === 'Enter' || key === '=') handlingClick(null, '=')
+  else if (key === 'Escape') handlingClick(null, 'AC')
+  // Backspace is now fully handled in InputDisplay
+}
 
 
 
