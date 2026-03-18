@@ -42,9 +42,24 @@ const App = () => {
       nextCaret.current = pos + 1
     }
     else if (item === "=") {
+      if (!input.trim()) {
+        setOutput("o_o")  // ← reset to o_o instead of just returning
+        return
+      }
       try {
         const expression = input.replace(/×/g, "*").replace(/÷/g, "/")
-        setOutput(eval(expression))
+        const result = eval(expression)
+
+        let formatted = Number.isInteger(result)
+          ? result
+          : parseFloat(result.toPrecision(13))  // trim long decimals
+
+        // if still too long for the display, force exponential
+        if (String(formatted).length > 14) {
+          formatted = result.toExponential(8)   // e.g. 1.6667e+9
+        }
+
+        setOutput(formatted)
       } catch {
         setOutput("error")
       }
