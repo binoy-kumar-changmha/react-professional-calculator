@@ -17,24 +17,29 @@ const App = () => {
   const [output, setOutput] = useState("o_o")
   const [input, setInput] = useState("")
   const inputRef = useRef(null)
-  const caretRef = useRef(null)
-  const nextCaret = useRef(null)  // ← moved here from InputDisplay
+  const nextCaret = useRef(null)
 
-  function handlingClick(event, item, caret) {
-    const safeCaret = caret ?? caretRef.current ?? input.length
+  function handlingClick(event, item) {
+    // Read directly from DOM — always accurate, no stale ref
+    const pos = inputRef.current?.selectionStart ?? input.length
 
     if (item === "AC") {
       setOutput("o_o")
       setInput("")
+      nextCaret.current = 0
     }
     else if (item === "⌫") {
-      if (safeCaret === 0) return
-      setInput(prev => prev.slice(0, safeCaret - 1) + prev.slice(safeCaret))
-      nextCaret.current = safeCaret - 1  // ← restore caret after delete
+      if (pos === 0) return
+      setInput(prev => prev.slice(0, pos - 1) + prev.slice(pos))
+      nextCaret.current = pos - 1
     }
     else if (item === "*") {
-      setInput(prev => prev.slice(0, safeCaret) + '×' + prev.slice(safeCaret))
-      nextCaret.current = safeCaret + 1
+      setInput(prev => prev.slice(0, pos) + '×' + prev.slice(pos))
+      nextCaret.current = pos + 1
+    }
+    else if (item === "/") {
+      setInput(prev => prev.slice(0, pos) + '÷' + prev.slice(pos))
+      nextCaret.current = pos + 1
     }
     else if (item === "=") {
       try {
@@ -45,8 +50,8 @@ const App = () => {
       }
     }
     else {
-      setInput(prev => prev.slice(0, safeCaret) + item + prev.slice(safeCaret))
-      nextCaret.current = safeCaret + 1  // ← restore caret after insert
+      setInput(prev => prev.slice(0, pos) + item + prev.slice(pos))
+      nextCaret.current = pos + 1
     }
   }
 
@@ -57,7 +62,7 @@ const App = () => {
   }
 
   return <Calculator>
-    <InputDisplay caretRef={caretRef} nextCaret={nextCaret} input={input} handleKeyboard={handleKeyboard} setInput={setInput} inputRef={inputRef} />
+    <InputDisplay nextCaret={nextCaret} input={input} handleKeyboard={handleKeyboard} setInput={setInput} inputRef={inputRef} />
     <OutputDisplay output={output} />
     <Buttons buttonArr={buttonArr} handlingClick={handlingClick} />
   </Calculator>

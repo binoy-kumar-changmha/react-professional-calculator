@@ -1,13 +1,13 @@
 import { useLayoutEffect } from 'react'
 import styles from './InputDisplay.module.css'
 
-function InputDisplay({ input, handleKeyboard, setInput, inputRef, caretRef, nextCaret }) {
+function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) {
   const isMobile = 'ontouchstart' in window
 
   useLayoutEffect(() => {
     if (nextCaret.current !== null && inputRef.current) {
       inputRef.current.setSelectionRange(nextCaret.current, nextCaret.current)
-      caretRef.current = nextCaret.current  // ← keep both refs in sync
+      inputRef.current.scrollLeft = inputRef.current.scrollWidth
       nextCaret.current = null
     }
   })
@@ -21,13 +21,13 @@ function InputDisplay({ input, handleKeyboard, setInput, inputRef, caretRef, nex
 
   return (
     <input
+      
       ref={inputRef}
-      autoFocus={!isMobile}
+      autoFocus
       inputMode={isMobile ? "none" : "text"}
       type="text"
       className={styles.inputDisplay}
       value={input}
-      onSelect={(e) => { caretRef.current = e.target.selectionStart }}  // ← one event covers everything
       onChange={(e) => {
         if (isMobile) return
         const pos = e.target.selectionStart

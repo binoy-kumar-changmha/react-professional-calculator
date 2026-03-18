@@ -35,7 +35,7 @@ function Items({ buttonArr, handlingClick }) {
           className={`${styles.item}
           ${orangeBtns.includes(item) ? styles.orange : ''}
           ${lightBtns.includes(item) ? styles.lightGrey : ''}`}
-          onMouseDown={(e) => e.preventDefault()}
+          onPointerDown={(e) => e.preventDefault()}  // ← covers both mouse and touch
           onClick={(event) => {
             createRipple(event)
             handlingClick(event, item)
