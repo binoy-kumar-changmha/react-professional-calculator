@@ -5,7 +5,27 @@ function Items({ buttonArr, handlingClick }) {
   const orangeBtns = ['*', '/', '+', '-', '=']
   const lightBtns = ['AC', '(', ')']
 
+  // Pop up sounds
+  function playPop() {
+    const ctx = new window.AudioContext()
+    const oscillator = ctx.createOscillator()
+    const gain = ctx.createGain()
 
+    oscillator.connect(gain)
+    gain.connect(ctx.destination)
+
+    oscillator.type = 'sine'
+    oscillator.frequency.setValueAtTime(300, ctx.currentTime)
+    oscillator.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.05)
+
+    gain.gain.setValueAtTime(0.1, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08)
+
+    oscillator.start(ctx.currentTime)
+    oscillator.stop(ctx.currentTime + 0.08)
+  }
+
+  // Ripple effect
   function createRipple(e) {
     const button = e.currentTarget
 
@@ -35,7 +55,13 @@ function Items({ buttonArr, handlingClick }) {
           className={`${styles.item}
           ${orangeBtns.includes(item) ? styles.orange : ''}
           ${lightBtns.includes(item) ? styles.lightGrey : ''}`}
-          onPointerDown={(e) => e.preventDefault()}  // ← covers both mouse and touch
+          onPointerDown={(e) => {
+            e.preventDefault()
+            if (navigator.vibrate) navigator.vibrate(500)  // vibrate on press — Android only, iOS blocks this
+          }}
+          onPointerUp={() => {
+            playPop()  // pop sound on release — works on both desktop and mobile
+          }}
           onClick={(event) => {
             createRipple(event)
             handlingClick(event, item)
