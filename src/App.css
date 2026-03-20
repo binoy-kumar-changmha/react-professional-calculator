@@ -5,6 +5,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  overflow: hidden;
 }
 
 @media (min-width: 768px) {

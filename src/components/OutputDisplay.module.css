@@ -8,7 +8,5 @@
   font-size: 2.5rem; /*could not make it in percentage */
   color: white;
 
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  text-align: right;
 }
