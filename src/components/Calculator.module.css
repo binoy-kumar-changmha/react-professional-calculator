@@ -16,6 +16,13 @@
     height: 48rem;
     padding: 1rem;
     border-radius: 1rem;
-    box-shadow: 0rem 0rem 1.5rem rgba(100, 149, 237, .8); 
+    box-shadow: 0rem 0rem 1.5rem rgba(100, 149, 237, .8);
+  }
+}
+
+@media (display-mode: standalone) {
+  .calculator {
+    height: 100vh;
+    /* full height in PWA app */
   }
 }

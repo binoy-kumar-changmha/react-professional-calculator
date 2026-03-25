@@ -38,7 +38,7 @@ function Items({ buttonArr, handlingClick }) {
           ${lightBtns.includes(item) ? styles.lightGrey : ''}`}
           onPointerDown={(e) => {
             e.preventDefault()
-            if (window.userInteracted) navigator.vibrate(10)  // only after first interaction
+            if (window.userInteracted) navigator.vibrate(15)  // only after first interaction
           }}
           onClick={(event) => {
             createRipple(event)

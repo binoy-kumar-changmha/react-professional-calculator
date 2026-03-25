@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
 
       manifest: {
-        name: 'IdeaCodeInnovate',
+        name: "Binoy's Calculator",
         short_name: 'Calculator',
-        description: 'Build. Code. Innovate.',
+        description: 'Idea. Code. Innovate.',
         theme_color: '#0f172a',
         background_color: '#ffffff',
         display: 'standalone',

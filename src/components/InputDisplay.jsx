@@ -2,7 +2,8 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import styles from './InputDisplay.module.css'
 
 function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) {
-  const isMobile = 'ontouchstart' in window
+  // CHANGED: also treat standalone PWA as mobile (no keyboard)
+  const isMobile = 'ontouchstart' in window || window.matchMedia('(display-mode: standalone)').matches
   const ignoreScroll = useRef(false)
   const [, forceUpdate] = useState(0)
 
