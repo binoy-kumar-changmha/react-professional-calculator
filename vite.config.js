@@ -9,6 +9,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
 
       manifest: {
+        theme_color: '#121212',  // rgb(18,18,18) in hex — controls browser UI color
+        background_color: '#121212',  // CHANGED: match too, shown during splash screen
         name: "Binoy's Calculator",
         short_name: 'Calculator',
         description: 'Idea. Code. Innovate.',
