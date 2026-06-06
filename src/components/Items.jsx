@@ -45,10 +45,9 @@ function Items({ buttonArr, handlingClick }) {
               const isBudgetDevice = navigator.deviceMemory && navigator.deviceMemory <= 4
               navigator.vibrate(isBudgetDevice ? 40 : 15)
             }
-          }}
-          onClick={(event) => {
-            createRipple(event)
-            handlingClick(event, item)
+            // Execute the action instantly on touch-down, just like native iOS calculators
+            createRipple(e)
+            handlingClick(e, item)
           }}>
 
           {item === '*' ? '×' : item === '-' ? '−' : item === '/' ? '÷' : item}
