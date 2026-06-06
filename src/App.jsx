@@ -20,8 +20,10 @@ const App = () => {
   const nextCaret = useRef(null)
 
   function handlingClick(event, item) {
-    const start = inputRef.current?.selectionStart ?? input.length
-    const end = inputRef.current?.selectionEnd ?? input.length    // ADDED: track selection end
+    // FIX: Read from nextCaret.current if there's a pending unrendered update
+    const isPending = nextCaret.current !== null
+    const start = isPending ? nextCaret.current : (inputRef.current?.selectionStart ?? input.length)
+    const end = isPending ? nextCaret.current : (inputRef.current?.selectionEnd ?? input.length)
 
     if (item === "AC") {
       setOutput("o_o")

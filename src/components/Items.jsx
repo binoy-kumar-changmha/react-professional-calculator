@@ -41,7 +41,9 @@ function Items({ buttonArr, handlingClick }) {
             // Only vibrate on touch devices (exclude desktop) and if the API is supported (prevent iOS errors)
             const isTouchDevice = window.matchMedia("(pointer: coarse)").matches
             if (window.userInteracted && isTouchDevice && 'vibrate' in navigator) {
-              navigator.vibrate(15)
+              // Dynamic duration: budget phones (<=4GB RAM) need 40ms, flagships only need 15ms
+              const isBudgetDevice = navigator.deviceMemory && navigator.deviceMemory <= 4
+              navigator.vibrate(isBudgetDevice ? 40 : 15)
             }
           }}
           onClick={(event) => {
