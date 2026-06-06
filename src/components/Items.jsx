@@ -41,7 +41,7 @@ function Items({ buttonArr, handlingClick }) {
             // Only vibrate on touch devices (exclude desktop) and if the API is supported (prevent iOS errors)
             const isTouchDevice = window.matchMedia("(pointer: coarse)").matches
             if (window.userInteracted && isTouchDevice && 'vibrate' in navigator) {
-              navigator.vibrate(15)
+              navigator.vibrate(12)
             }
             // Execute the action instantly on touch-down, just like native iOS calculators
             createRipple(e)
