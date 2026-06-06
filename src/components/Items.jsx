@@ -38,7 +38,11 @@ function Items({ buttonArr, handlingClick }) {
           ${lightBtns.includes(item) ? styles.lightGrey : ''}`}
           onPointerDown={(e) => {
             e.preventDefault()
-            if (window.userInteracted) navigator.vibrate(15)  // only after first interaction
+            // Only vibrate on touch devices (exclude desktop) and if the API is supported (prevent iOS errors)
+            const isTouchDevice = window.matchMedia("(pointer: coarse)").matches
+            if (window.userInteracted && isTouchDevice && 'vibrate' in navigator) {
+              navigator.vibrate(15)
+            }
           }}
           onClick={(event) => {
             createRipple(event)
