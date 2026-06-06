@@ -6,6 +6,10 @@ body {
   justify-content: center;
   align-items: flex-start;
   /* overflow: hidden; */
+  overscroll-behavior: none;
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .display {

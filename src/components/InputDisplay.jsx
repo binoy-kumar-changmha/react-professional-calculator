@@ -45,7 +45,10 @@ function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) 
   useEffect(() => {
     // Hide keyboard when app resumes or visibility changes (edge case)
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && document.activeElement === inputRef.current) {
+      if (document.visibilityState === 'hidden' && document.activeElement === inputRef.current) {
+        // Actively blur so that when we resume, the OS doesn't force the keyboard to appear
+        inputRef.current.blur()
+      } else if (document.visibilityState === 'visible') {
         hideVirtualKeyboard()
       }
     }
