@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState, useEffect } from 'react'
 import styles from './InputDisplay.module.css'
 
 function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) {
@@ -7,7 +7,22 @@ function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) 
   const ignoreScroll = useRef(false)
   const [, forceUpdate] = useState(0)
 
+  // Explicitly hide the virtual keyboard if the modern API is available
+  const hideVirtualKeyboard = () => {
+    if ('virtualKeyboard' in navigator) {
+      navigator.virtualKeyboard.hide()
+    }
+  }
+
   useLayoutEffect(() => {
+    if (inputRef.current) {
+      // Modern Chromium API: strictly decouple focus from virtual keyboard
+      inputRef.current.virtualKeyboardPolicy = 'manual'
+    }
+    if ('virtualKeyboard' in navigator) {
+      navigator.virtualKeyboard.overlaysContent = true
+    }
+
     if (nextCaret.current !== null && inputRef.current) {
       const el = inputRef.current
       const prevScroll = el.scrollLeft
@@ -27,11 +42,24 @@ function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) 
     }
   })
 
+  useEffect(() => {
+    // Hide keyboard when app resumes or visibility changes (edge case)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && document.activeElement === inputRef.current) {
+        hideVirtualKeyboard()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [inputRef])
+
   function handleScroll() {
     if (ignoreScroll.current) {
       ignoreScroll.current = false
       return
     }
+    // Also try to hide on scroll if iOS gets confused
+    hideVirtualKeyboard()
     forceUpdate(n => n + 1)
   }
 
@@ -70,13 +98,17 @@ function InputDisplay({ input, handleKeyboard, setInput, inputRef, nextCaret }) 
       type="text"
       className={styles.inputDisplay}
       value={input}
+      autoCapitalize="off"
+      autoComplete="off"
+      autoCorrect="off"
+      spellCheck={false}
       style={{
         fontSize: getFont(input.length),
         maskImage: getMask()
       }}
-      onTouchStart={(e) => { if (isMobile) e.preventDefault() }}  // ADDED: blocks keyboard on mobile, keeps caret
-      // what it does actually ?
-      
+      onFocus={hideVirtualKeyboard}
+      onClick={hideVirtualKeyboard}
+      onSelect={hideVirtualKeyboard}
       onScroll={handleScroll}
       onChange={(e) => {
         if (isMobile) return
