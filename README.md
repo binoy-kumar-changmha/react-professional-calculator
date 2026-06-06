@@ -3,7 +3,6 @@
 A modern, fully functional calculator built with React with smooth UI and premium design.
 
 **Live Demo (Vercel):** [https://react-calculator-changmha.vercel.app/](https://react-calculator-changmha.vercel.app/)  
-**Live Demo (Netlify):** [https://react-calculator-changmha.netlify.app/](https://react-calculator-changmha.netlify.app/)
 
 
 ## Features
